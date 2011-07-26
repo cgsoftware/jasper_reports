@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CataloghiDB" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT
+     product_supplierinfo."id" AS product_supplierinfo_id,
+     product_supplierinfo."product_id" AS product_supplierinfo_product_id,
+     product_supplierinfo."name" AS product_supplierinfo_name,
+     res_partner."id" AS res_partner_id,
+     res_partner."name" AS res_partner_name
+FROM
+     "public"."res_partner" res_partner INNER JOIN "public"."product_supplierinfo" product_supplierinfo ON res_partner."id" = product_supplierinfo."name"
+ORDER BY
+     res_partner_name ASC]]>
+	</queryString>
+	<field name="product_supplierinfo_id" class="java.lang.Integer"/>
+	<field name="product_supplierinfo_product_id" class="java.lang.Integer"/>
+	<field name="product_supplierinfo_name" class="java.lang.Integer"/>
+	<field name="res_partner_id" class="java.lang.Integer"/>
+	<field name="res_partner_name" class="java.lang.String"/>
+	<group name="res_partner_id">
+		<groupExpression><![CDATA[$F{res_partner_id}]]></groupExpression>
+	</group>
+	<group name="RagioneSociale">
+		<groupExpression><![CDATA[$F{res_partner_name}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<textField>
+					<reportElement x="0" y="0" width="555" height="20"/>
+					<textElement/>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{res_partner_name}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="48" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="7" width="555" height="27" backcolor="#EEFB09"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="22" isBold="false" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Elenco Cataloghi Fornitori]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="31" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="214" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ragione Sociale Fornitore]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="23" width="555" height="2"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="43" splitType="Stretch">
+			<printWhenExpression><![CDATA[false]]></printWhenExpression>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="35" splitType="Stretch">
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="7" y="6" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="416" y="6" width="80" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA["Pagina "+$V{PAGE_NUMBER}+" di"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="496" y="6" width="40" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="3" width="555" height="1"/>
+			</line>
+		</band>
+	</pageFooter>
+</jasperReport>

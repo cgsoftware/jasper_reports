@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="guinama-certificado" language="i18ngroovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="OPENERP_RELATIONS" value="[&apos;specific_quality_test_id/test_line_ids&apos;]"/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="defecto" isDefault="true" forecolor="#000000" backcolor="#FFFFFF" fill="Solid" vAlign="Middle" markup="none" pattern="" isBlankWhenNull="true" fontName="SansSerif" fontSize="9" isBold="false" isItalic="false" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+	<style name="textoscabecera" style="defecto" forecolor="#000000" backcolor="#CCFFCC" radius="10" isBold="true" pdfFontName="Helvetica-Bold">
+		<pen lineWidth="1.0" lineColor="#FF0066"/>
+	</style>
+	<style name="negrita" vAlign="Middle" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold"/>
+	<queryString language="xPath">
+		<![CDATA[/data/root]]>
+	</queryString>
+	<field name="Logo-logo" class="java.lang.String">
+		<fieldDescription><![CDATA[/data/record/User-User/Companyia-company_id/Logo-logo]]></fieldDescription>
+	</field>
+	<field name="Idioma-lang" class="java.lang.String">
+		<fieldDescription><![CDATA[/data/record/User-User/Companyia-company_id/Empresa-partner_id/Idioma-lang]]></fieldDescription>
+	</field>
+	<field name="Sitio_web-website" class="java.lang.String">
+		<fieldDescription><![CDATA[/data/record/User-User/Compania-company_id/Empresa-partner_id/Sitio_web-website]]></fieldDescription>
+	</field>
+	<field name="Telefono-phone" class="java.lang.String">
+		<fieldDescription><![CDATA[/data/record/User-User/Compania-company_id/Empresa-partner_id/Contactos-address/Telefono-phone]]></fieldDescription>
+	</field>
+	<field name="Provincia-state_id" class="java.lang.String">
+		<fieldDescription><![CDATA[/data/record/User-User/Compania-company_id/Empresa-partner_id/Contactos-address/Provincia-state_id]]></fieldDescription>
+	</field>
+	<field name="Fax-fax" class="java.lang.String">
+		<fieldDescription><![CDATA[/data/record/User-User/Compania-company_id/Empresa-partner_id/Contactos-address/Fax-fax]]></fieldDescription>
+	</field>
+	<field name="Email-email" class="java.lang.String">
+		<fieldDescription><![CDATA[/data/record/User-User/Compania-company_id/Empresa-partner_id/Contactos-address/Email-email]]></fieldDescription>
+	</field>
+	<field name="Ciudad-city" class="java.lang.String">
+		<fieldDescription><![CDATA[/data/record/User-User/Compania-company_id/Empresa-partner_id/Contactos-address/Ciudad-city]]></fieldDescription>
+	</field>
+	<field name="Calle-street" class="java.lang.String">
+		<fieldDescription><![CDATA[/data/record/User-User/Compania-company_id/Empresa-partner_id/Contactos-address/Calle-street]]></fieldDescription>
+	</field>
+	<field name="Calle2-street2" class="java.lang.String">
+		<fieldDescription><![CDATA[/data/record/User-User/Compania-company_id/Empresa-partner_id/Contactos-address/Calle2-street2]]></fieldDescription>
+	</field>
+	<field name="C.P.-zip" class="java.lang.String">
+		<fieldDescription><![CDATA[/data/record/User-User/Compania-company_id/Empresa-partner_id/Contactos-address/C.P.-zip]]></fieldDescription>
+	</field>
+	<field name="Nombre_del_documento_adjunto-name" class="java.lang.String">
+		<fieldDescription><![CDATA[/data/record/User-User/Compania-company_id/Attachments-Attachments/Nombre_del_documento_adjunto-name]]></fieldDescription>
+	</field>
+	<field name="Contenido_del_fichero-datas" class="java.lang.String">
+		<fieldDescription><![CDATA[/data/record/User-User/Compania-company_id/Attachments-Attachments/Contenido_del_fichero-datas]]></fieldDescription>
+	</field>
+	<field name="Nombre-name2" class="java.lang.String">
+		<fieldDescription><![CDATA[/data/record/Specific_Quality_Test-specific_quality_test_id/Test-test_template_id/Lines-test_template_line_ids/Uom-uom_id/Nombre-name]]></fieldDescription>
+	</field>
+	<field name="Nombre-name" class="java.lang.String">
+		<fieldDescription><![CDATA[/data/record/Specific_Quality_Test-specific_quality_test_id/Test_Lines-test_line_ids/Uom-uom_id/Nombre-name]]></fieldDescription>
+	</field>
+	<field name="id2" class="java.lang.String">
+		<fieldDescription><![CDATA[/data/record/Specific_Quality_Test-specific_quality_test_id/Test_Lines-test_line_ids/Uom-uom_id/id]]></fieldDescription>
+	</field>
+	<field name="Nombre-name3" class="java.lang.String">
+		<fieldDescription><![CDATA[/data/record/Specific_Quality_Test-specific_quality_test_id/Test_Lines-test_line_ids/Test_Template_Line-test_template_line_id/Uom-uom_id/Nombre-name]]></fieldDescription>
+	</field>
+	<field name="Qt.Value-actual_value_qt" class="java.lang.Double">
+		<fieldDescription><![CDATA[/data/record/Specific_Quality_Test-specific_quality_test_id/Test_Lines-test_line_ids/Qt.Value-actual_value_qt]]></fieldDescription>
+	</field>
+	<field name="Name-name2" class="java.lang.String">
+		<fieldDescription><![CDATA[/data/record/Specific_Quality_Test-specific_quality_test_id/Test_Lines-test_line_ids/Ql.Value-actual_value_ql/Name-name]]></fieldDescription>
+	</field>
+	<field name="Name-name" class="java.lang.String">
+		<fieldDescription><![CDATA[/data/record/Specific_Quality_Test-specific_quality_test_id/Test_Lines-test_line_ids/Proof-proof_id/Name-name]]></fieldDescription>
+	</field>
+	<field name="Proof_Type-proof_type" class="java.lang.String">
+		<fieldDescription><![CDATA[/data/record/Specific_Quality_Test-specific_quality_test_id/Test_Lines-test_line_ids/Proof_Type-proof_type]]></fieldDescription>
+	</field>
+	<field name="Min-min_value" class="java.lang.Float">
+		<fieldDescription><![CDATA[/data/record/Specific_Quality_Test-specific_quality_test_id/Test_Lines-test_line_ids/Min-min_value]]></fieldDescription>
+	</field>
+	<field name="Max-max_value" class="java.lang.Float">
+		<fieldDescription><![CDATA[/data/record/Specific_Quality_Test-specific_quality_test_id/Test_Lines-test_line_ids/Max-max_value]]></fieldDescription>
+	</field>
+	<field name="Date-name" class="java.lang.String">
+		<fieldDescription><![CDATA[/data/record/Specific_Quality_Test-specific_quality_test_id/Date-name]]></fieldDescription>
+	</field>
+	<field name="Quality_Description-quality_description" class="java.lang.String">
+		<fieldDescription><![CDATA[/data/record/Producto-product_id/Plantilla_de_producto-product_tmpl_id/Quality_Description-quality_description]]></fieldDescription>
+	</field>
+	<field name="Label_Name-label_product_name" class="java.lang.String">
+		<fieldDescription><![CDATA[/data/record/Producto-product_id/Label_Name-label_product_name]]></fieldDescription>
+	</field>
+	<field name="Codi-code" class="java.lang.String">
+		<fieldDescription><![CDATA[/data/record/Producte-product_id/Codi-code]]></fieldDescription>
+	</field>
+	<field name="Descripcio-description" class="java.lang.String">
+		<fieldDescription><![CDATA[/data/record/Producte-product_id/Attachments-Attachments/Descripcio-description]]></fieldDescription>
+	</field>
+	<field name="No_serie-name" class="java.lang.String">
+		<fieldDescription><![CDATA[/data/record/No_serie-name]]></fieldDescription>
+	</field>
+	<field name="id" class="java.lang.String">
+		<fieldDescription><![CDATA[/data/record/id]]></fieldDescription>
+	</field>
+	<field name="Fecha_caducidad-dluo" class="java.util.Date">
+		<fieldDescription><![CDATA[/data/record/Fecha_caducidad-dluo]]></fieldDescription>
+	</field>
+	<field name="Fecha_alarma-alert_date" class="java.util.Date">
+		<fieldDescription><![CDATA[/data/record/Fecha_alarma-alert_date]]></fieldDescription>
+	</field>
+	<sortField name="Proof_Type-proof_type" order="Descending"/>
+	<variable name="L" class="java.util.Locale">
+		<variableExpression><![CDATA[$F{Idioma-lang} != null && $F{Idioma-lang}.length() == 5 ? new Locale( $F{Idioma-lang}.substring(0,2), $F{Idioma-lang}.substring(3,5) ) : ( $F{Idioma-lang} != null && $F{Idioma-lang}.length() == 2 ? new Locale( $F{Idioma-lang}.substring(0,2) ) : $P{REPORT_LOCALE} )]]></variableExpression>
+		<initialValueExpression><![CDATA[$F{Idioma-lang} != null && $F{Idioma-lang}.length() == 5 ? new Locale( $F{Idioma-lang}.substring(0,2), $F{Idioma-lang}.substring(3,5) ) : ( $F{Idioma-lang} != null && $F{Idioma-lang}.length() == 2 ? new Locale( $F{Idioma-lang}.substring(0,2) ) : $P{REPORT_LOCALE} )]]></initialValueExpression>
+	</variable>
+	<group name="certified">
+		<groupExpression><![CDATA[$F{id}]]></groupExpression>
+		<groupHeader>
+			<band/>
+		</groupHeader>
+		<groupFooter>
+			<band height="235">
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="1" y="38" width="552" height="197" isPrintInFirstWholeBand="true"/>
+					<textElement verticalAlignment="Top">
+						<font size="8" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{Quality_Description-quality_description}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="textoscabecera" x="2" y="4" width="246" height="18"/>
+					<textElement verticalAlignment="Middle">
+						<font size="9" isUnderline="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[tr($V{L},"Información adicional de este artículo")]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="defecto" x="0" y="18" width="164" height="20"/>
+					<textElement verticalAlignment="Middle">
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[tr($V{L},"FECHA DE CADUCIDAD:")]]></textFieldExpression>
+				</textField>
+				<textField pattern="dd/MM/yyyy">
+					<reportElement x="164" y="18" width="100" height="20"/>
+					<textElement/>
+					<textFieldExpression class="java.util.Date"><![CDATA[$F{Fecha_caducidad-dluo}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="109" splitType="Stretch">
+			<textField>
+				<reportElement style="negrita" x="208" y="15" width="258" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="16" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[tr($V{L},"Certificado de Análisis")]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="61" width="555" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.25"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement style="defecto" x="1" y="61" width="44" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[tr($V{L},"Artículo")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="defecto" x="406" y="62" width="44" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[tr($V{L},"Lote:")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="defecto" x="0" y="83" width="62" height="22"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[tr($V{L},"Prueba:")]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="106" width="555" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.25"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement style="textoscabecera" x="208" y="83" width="78" height="22"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[tr($V{L},"Medicion")]]></textFieldExpression>
+			</textField>
+			<image onErrorType="Icon">
+				<reportElement x="0" y="0" width="145" height="52"/>
+				<imageExpression class="java.lang.String"><![CDATA[$F{Logo-logo}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="454" y="62" width="100" height="20"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{No_serie-name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="62" y="62" width="342" height="20"/>
+				<textElement>
+					<font size="9" isBold="true" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{Codi-code}+ " " +$F{Label_Name-label_product_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="62" y="83" width="128" height="22"/>
+				<textElement>
+					<font size="8" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{Date-name}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="3" y="82" width="555" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.25"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement style="textoscabecera" x="302" y="81" width="72" height="24"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[tr($V{L},"Min")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="textoscabecera" x="379" y="83" width="75" height="22"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[tr($V{L},"Max")]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="16" splitType="Stretch">
+			<textField>
+				<reportElement x="2" y="1" width="206" height="11"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{Name-name}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="379" y="1" width="75" height="11"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{Proof_Type-proof_type}.equals("qualitative") ? null : $F{Max-max_value} == null ? "0,0" : (NumberFormat.getInstance($P{REPORT_LOCALE}).format( $F{Max-max_value} ))]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement x="302" y="0" width="72" height="11"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{Proof_Type-proof_type}.equals("qualitative") ? null : $F{Min-min_value} == null ? "0,0" : (NumberFormat.getInstance($P{REPORT_LOCALE}).format( $F{Min-min_value} ))]]></textFieldExpression>
+			</textField>
+			<textField pattern="">
+				<reportElement x="208" y="1" width="78" height="11"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{Proof_Type-proof_type}.equals("qualitative") ? $F{Name-name2} : (NumberFormat.getInstance($P{REPORT_LOCALE}).format( $F{Qt.Value-actual_value_qt} ) + " " + $F{Nombre-name3})]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="141" splitType="Prevent">
+			<textField>
+				<reportElement style="defecto" x="0" y="0" width="555" height="32"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[tr($V{L},"Los datos expresados en este certificado de analisis, reproducen los facilitados por nuestro proveedor y/o los obetenidos en nuestro laboratorio de control, sin que en ningun caso eximan de los controles exigidos en cada sector")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="defecto" x="309" y="119" width="242" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[tr($V{L},"Directora Tecnica: Maria Jose Bosch")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="textoscabecera" x="-1" y="85" width="176" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[tr($V{L},"Dto. Tec:96-1869190")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="-2" y="32" width="553" height="12"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{Calle-street} + " " + $F{C.P.-zip} + " " + $F{Ciudad-city} + " ("+$F{Provincia-state_id}+")"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="defecto" x="-1" y="44" width="465" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[tr($V{L},"Tfno:") + $F{Telefono-phone} + " " + tr($V{L},"Fax: ") + " " +$F{Fax-fax}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="defecto" x="-1" y="60" width="375" height="14"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[tr($V{L},"e-mail: ") + $F{Email-email} + " " + $F{Sitio_web-website}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="250" y="90" width="100" height="20">
+					<printWhenExpression><![CDATA[$F{Nombre_del_documento_adjunto-name}=="Firma"]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{Nombre_del_documento_adjunto-name}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>
