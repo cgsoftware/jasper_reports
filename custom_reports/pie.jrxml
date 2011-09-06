@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="top" pageWidth="470" pageHeight="200" orientation="Landscape" columnWidth="470" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="346"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="name" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     account_temp_totaliregiva."id" AS account_temp_totaliregiva_id,
+     account_temp_totaliregiva."create_uid" AS account_temp_totaliregiva_create_uid,
+     account_temp_totaliregiva."create_date" AS account_temp_totaliregiva_create_date,
+     account_temp_totaliregiva."write_date" AS account_temp_totaliregiva_write_date,
+     account_temp_totaliregiva."write_uid" AS account_temp_totaliregiva_write_uid,
+     account_temp_totaliregiva."period_registro_id" AS account_temp_totaliregiva_period_registro_id,
+     account_temp_totaliregiva."tot_imposta_progressivo" AS account_temp_totaliregiva_tot_imposta_progressivo,
+     account_temp_totaliregiva."tot_impon_progressivo" AS account_temp_totaliregiva_tot_impon_progressivo,
+     account_temp_totaliregiva."journal_id" AS account_temp_totaliregiva_journal_id,
+     account_temp_totaliregiva."codice_iva_riga_id" AS account_temp_totaliregiva_codice_iva_riga_id,
+     account_temp_totaliregiva."period_id" AS account_temp_totaliregiva_period_id,
+     account_temp_totaliregiva."tot_imposta_periodo" AS account_temp_totaliregiva_tot_imposta_periodo,
+     account_temp_totaliregiva."indetraibile" AS account_temp_totaliregiva_indetraibile,
+     account_temp_totaliregiva."tot_impon_periodo" AS account_temp_totaliregiva_tot_impon_periodo,
+     account_tax."name" AS account_tax_name,
+     account_period."id" AS account_period_id,
+     account_period."create_uid" AS account_period_create_uid,
+     account_period."create_date" AS account_period_create_date,
+     account_period."write_date" AS account_period_write_date,
+     account_period."write_uid" AS account_period_write_uid,
+     account_period."date_stop" AS account_period_date_stop,
+     account_period."code" AS account_period_code,
+     account_period."name" AS account_period_name,
+     account_period."date_start" AS account_period_date_start,
+     account_period."fiscalyear_id" AS account_period_fiscalyear_id,
+     account_period."company_id" AS account_period_company_id,
+     account_period."state" AS account_period_state,
+     account_period."special" AS account_period_special
+FROM
+     "public"."account_tax" account_tax RIGHT OUTER JOIN "public"."account_temp_totaliregiva" account_temp_totaliregiva ON account_tax."id" = account_temp_totaliregiva."codice_iva_riga_id"
+     LEFT OUTER JOIN "public"."account_period" account_period ON account_temp_totaliregiva."period_id" = account_period."id"]]>
+	</queryString>
+	<field name="account_temp_totaliregiva_id" class="java.lang.Integer"/>
+	<field name="account_temp_totaliregiva_create_uid" class="java.lang.Integer"/>
+	<field name="account_temp_totaliregiva_create_date" class="java.sql.Timestamp"/>
+	<field name="account_temp_totaliregiva_write_date" class="java.sql.Timestamp"/>
+	<field name="account_temp_totaliregiva_write_uid" class="java.lang.Integer"/>
+	<field name="account_temp_totaliregiva_period_registro_id" class="java.lang.Integer"/>
+	<field name="account_temp_totaliregiva_tot_imposta_progressivo" class="java.math.BigDecimal"/>
+	<field name="account_temp_totaliregiva_tot_impon_progressivo" class="java.math.BigDecimal"/>
+	<field name="account_temp_totaliregiva_journal_id" class="java.lang.Integer"/>
+	<field name="account_temp_totaliregiva_codice_iva_riga_id" class="java.lang.Integer"/>
+	<field name="account_temp_totaliregiva_period_id" class="java.lang.Integer"/>
+	<field name="account_temp_totaliregiva_tot_imposta_periodo" class="java.math.BigDecimal"/>
+	<field name="account_temp_totaliregiva_indetraibile" class="java.lang.Boolean"/>
+	<field name="account_temp_totaliregiva_tot_impon_periodo" class="java.math.BigDecimal"/>
+	<field name="account_tax_name" class="java.lang.String"/>
+	<field name="account_period_id" class="java.lang.Integer"/>
+	<field name="account_period_create_uid" class="java.lang.Integer"/>
+	<field name="account_period_create_date" class="java.sql.Timestamp"/>
+	<field name="account_period_write_date" class="java.sql.Timestamp"/>
+	<field name="account_period_write_uid" class="java.lang.Integer"/>
+	<field name="account_period_date_stop" class="java.sql.Date"/>
+	<field name="account_period_code" class="java.lang.String"/>
+	<field name="account_period_name" class="java.lang.String"/>
+	<field name="account_period_date_start" class="java.sql.Date"/>
+	<field name="account_period_fiscalyear_id" class="java.lang.Integer"/>
+	<field name="account_period_company_id" class="java.lang.Integer"/>
+	<field name="account_period_state" class="java.lang.String"/>
+	<field name="account_period_special" class="java.lang.Boolean"/>
+	<variable name="imponibile_periodo" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{account_temp_totaliregiva_tot_impon_periodo}]]></variableExpression>
+	</variable>
+	<variable name="imposta_periodo" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{account_temp_totaliregiva_tot_imposta_periodo}]]></variableExpression>
+	</variable>
+	<variable name="progr_imponibile" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{account_temp_totaliregiva_tot_impon_progressivo}]]></variableExpression>
+	</variable>
+	<variable name="prog_imposta" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{account_temp_totaliregiva_tot_imposta_progressivo}]]></variableExpression>
+	</variable>
+	<group name="RR" isStartNewPage="true">
+		<groupHeader>
+			<band/>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="54" splitType="Stretch">
+			<staticText>
+				<reportElement x="3" y="0" width="135" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[RIEPILOGO DEL PERIODO DAL]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="142" y="0" width="60" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{account_period_date_start}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="207" y="0" width="15" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[AL]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="232" y="0" width="60" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{account_period_date_stop}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="17" width="370" height="1"/>
+			</line>
+			<staticText>
+				<reportElement x="3" y="20" width="100" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTALI DEL PERIODO	]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="106" y="20" width="70" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Imponibile]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="181" y="20" width="50" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Imposta	]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="246" y="20" width="100" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTALI PROGRESSIVI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="246" y="34" width="70" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Imponibile]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="320" y="34" width="50" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Imposta	]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="10" splitType="Stretch">
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement x="112" y="0" width="70" height="10"/>
+				<textElement>
+					<font size="8" isItalic="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{account_temp_totaliregiva_tot_impon_periodo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="10" y="0" width="100" height="10"/>
+				<textElement>
+					<font size="8" isItalic="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{account_tax_name}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement x="187" y="0" width="50" height="10"/>
+				<textElement>
+					<font size="8" isItalic="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{account_temp_totaliregiva_tot_imposta_periodo}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement x="252" y="0" width="70" height="10"/>
+				<textElement>
+					<font size="8" isItalic="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{account_temp_totaliregiva_tot_impon_progressivo}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement x="326" y="0" width="50" height="10"/>
+				<textElement>
+					<font size="8" isItalic="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{account_temp_totaliregiva_tot_imposta_progressivo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="37" splitType="Stretch">
+			<staticText>
+				<reportElement x="3" y="11" width="78" height="26"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTALE COMPLESSIVO]]></text>
+			</staticText>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement x="106" y="11" width="65" height="15"/>
+				<textElement>
+					<font size="8" isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{imponibile_periodo}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement x="181" y="11" width="50" height="15"/>
+				<textElement>
+					<font size="8" isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{imposta_periodo}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement x="246" y="11" width="70" height="15"/>
+				<textElement>
+					<font size="8" isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{progr_imponibile}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement x="320" y="11" width="50" height="15"/>
+				<textElement>
+					<font size="8" isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{prog_imposta}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="6" width="370" height="1"/>
+			</line>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

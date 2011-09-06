@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DDT" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
-	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.zoom" value="2.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="288"/>
+	<property name="ireport.y" value="96"/>
 	<style name="Righe" mode="Opaque">
 		<conditionalStyle>
 			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
 			<style backcolor="#E6DAC3"/>
 		</conditionalStyle>
 	</style>
-	<parameter name="dadata" class="java.lang.String" isForPrompting="false">
+	<parameter name="dadata" class="java.lang.String">
 		<parameterDescription><![CDATA[]]></parameterDescription>
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
-	<parameter name="adata" class="java.lang.String" isForPrompting="false">
+	<parameter name="adata" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<parameter name="danr" class="java.lang.String" isForPrompting="false">
@@ -23,8 +23,7 @@
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["./"]]></defaultValueExpression>
 	</parameter>
-	<parameter name="sconto" class="java.lang.Number"/>
-	<parameter name="prezzi" class="java.lang.Number"/>
+	<parameter name="prezzi" class="java.lang.Integer" isForPrompting="false"/>
 	<queryString>
 		<![CDATA[SELECT
      fiscaldoc_header."agente" AS fiscaldoc_header_agente,
@@ -90,7 +89,6 @@
      res_partner."vat" AS res_partner_vat,
      res_partner."name" AS res_partner_name,
      res_partner."sconto_partner" AS res_partner_sconto_partner,
-     res_partner_address."street2" AS res_partner_address_street2,
      res_partner_address."street" AS res_partner_address_street,
      res_partner_address."city" AS res_partner_address_city,
      res_partner_address."zip" AS res_partner_address_zip,
@@ -106,11 +104,15 @@
      res_users."name" AS res_users_name,
      account_payment_term."name" AS account_payment_term_name,
      res_bank."name" AS res_bank_name,
-     sale_shop."name" AS sale_shop_name
+     sale_shop."name" AS sale_shop_name,
+     res_partner_address_A."zip" AS res_partner_address_A_zip,
+     res_partner_address_A."city" AS res_partner_address_A_city,
+     res_partner_address_A."street" AS res_partner_address_A_street,
+     product_template."description_sale" AS product_template_description_sale
 FROM
      "public"."fiscaldoc_header" fiscaldoc_header INNER JOIN "public"."fiscaldoc_righe" fiscaldoc_righe ON fiscaldoc_header."id" = fiscaldoc_righe."name"
      LEFT OUTER JOIN "public"."fiscaldoc_spedizioni" fiscaldoc_spedizioni ON fiscaldoc_header."spedizione" = fiscaldoc_spedizioni."id"
-     INNER JOIN "public"."res_partner" res_partner ON fiscaldoc_header."partner_id" = res_partner."id"
+     LEFT OUTER JOIN "public"."res_partner" res_partner ON fiscaldoc_header."partner_id" = res_partner."id"
      LEFT OUTER JOIN "public"."stock_picking_carriage_condition" stock_picking_carriage_condition ON fiscaldoc_header."porto_id" = stock_picking_carriage_condition."id"
      LEFT OUTER JOIN "public"."stock_picking_goods_description" stock_picking_goods_description ON fiscaldoc_header."aspetto_esteriore_id" = stock_picking_goods_description."id"
      LEFT OUTER JOIN "public"."stock_picking_transportation_reason" stock_picking_transportation_reason ON fiscaldoc_header."causale_del_trasporto_id" = stock_picking_transportation_reason."id"
@@ -120,10 +122,12 @@ FROM
      LEFT OUTER JOIN "public"."res_bank" res_bank ON fiscaldoc_header."banca_patner" = res_bank."id"
      AND res_bank."id" = fiscaldoc_header."banca_azienda"
      LEFT OUTER JOIN "public"."sale_shop" sale_shop ON fiscaldoc_header."magazzino_id" = sale_shop."id"
-     INNER JOIN "public"."res_partner_address" res_partner_address ON res_partner."id" = res_partner_address."partner_id"
+     LEFT OUTER JOIN "public"."res_partner_address" res_partner_address ON fiscaldoc_header."partner_indfat_id" = res_partner_address."id"
+     LEFT OUTER JOIN "public"."res_partner_address" res_partner_address_A ON fiscaldoc_header."partner_indcons_id" = res_partner_address_A."id"
      LEFT OUTER JOIN "public"."product_uom" product_uom ON fiscaldoc_righe."product_uom" = product_uom."id"
      LEFT OUTER JOIN "public"."account_tax" account_tax ON fiscaldoc_righe."codice_iva" = account_tax."id"
      INNER JOIN "public"."product_product" product_product ON fiscaldoc_righe."product_id" = product_product."id"
+     INNER JOIN "public"."product_template" product_template ON product_product."product_tmpl_id" = product_template."id"
 WHERE
      fiscaldoc_header."name" >= $P{danr}
  AND fiscaldoc_header."name" <= $P{anr}
@@ -195,7 +199,6 @@ ORDER BY
 	<field name="res_partner_vat" class="java.lang.String"/>
 	<field name="res_partner_name" class="java.lang.String"/>
 	<field name="res_partner_sconto_partner" class="java.math.BigDecimal"/>
-	<field name="res_partner_address_street2" class="java.lang.String"/>
 	<field name="res_partner_address_street" class="java.lang.String"/>
 	<field name="res_partner_address_city" class="java.lang.String"/>
 	<field name="res_partner_address_zip" class="java.lang.String"/>
@@ -212,6 +215,10 @@ ORDER BY
 	<field name="account_payment_term_name" class="java.lang.String"/>
 	<field name="res_bank_name" class="java.lang.String"/>
 	<field name="sale_shop_name" class="java.lang.String"/>
+	<field name="res_partner_address_a_zip" class="java.lang.String"/>
+	<field name="res_partner_address_a_city" class="java.lang.String"/>
+	<field name="res_partner_address_a_street" class="java.lang.String"/>
+	<field name="product_template_description_sale" class="java.lang.String"/>
 	<sortField name="fiscaldoc_header_numdoc"/>
 	<group name="FAT" isStartNewPage="true" isResetPageNumber="true">
 		<groupExpression><![CDATA[$F{fiscaldoc_header_name}+$F{fiscaldoc_header_data_documento}]]></groupExpression>
@@ -223,12 +230,7 @@ ORDER BY
 		</groupFooter>
 	</group>
 	<background>
-		<band height="700" splitType="Stretch">
-			<image scaleImage="RetainShape" hAlign="Center" vAlign="Middle">
-				<reportElement x="0" y="400" width="555" height="114"/>
-				<imageExpression class="java.lang.String"><![CDATA["./logo2.jpg"]]></imageExpression>
-			</image>
-		</band>
+		<band height="700" splitType="Stretch"/>
 	</background>
 	<title>
 		<band splitType="Stretch"/>
@@ -236,7 +238,10 @@ ORDER BY
 	<pageHeader>
 		<band height="133" splitType="Stretch">
 			<rectangle radius="10">
-				<reportElement x="271" y="74" width="230" height="55" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement x="271" y="74" width="269" height="55" forecolor="#000000" backcolor="#FFFFFF"/>
+			</rectangle>
+			<rectangle radius="10">
+				<reportElement x="271" y="8" width="269" height="55" forecolor="#000000" backcolor="#FFFFFF"/>
 			</rectangle>
 			<staticText>
 				<reportElement x="277" y="76" width="100" height="8"/>
@@ -246,40 +251,37 @@ ORDER BY
 				<text><![CDATA[Intestatario Documento]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="277" y="84" width="209" height="10"/>
+				<reportElement x="277" y="84" width="253" height="10"/>
 				<textElement>
 					<font size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{res_partner_name}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="277" y="94" width="208" height="10"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="280" y="94" width="208" height="10"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{res_partner_address_street}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="277" y="104" width="37" height="10"/>
+				<reportElement x="280" y="104" width="37" height="10"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{res_partner_address_zip}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="317" y="104" width="129" height="10"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="320" y="104" width="129" height="10"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{res_partner_address_city}]]></textFieldExpression>
 			</textField>
 			<image>
-				<reportElement x="-4" y="0" width="199" height="105"/>
+				<reportElement x="2" y="0" width="258" height="129"/>
 				<imageExpression class="java.lang.String"><![CDATA["./logo.jpg"]]></imageExpression>
 			</image>
-			<rectangle radius="10">
-				<reportElement x="271" y="8" width="232" height="55" forecolor="#000000" backcolor="#FFFFFF"/>
-			</rectangle>
 			<staticText>
 				<reportElement x="277" y="10" width="100" height="8"/>
 				<textElement>
@@ -288,29 +290,40 @@ ORDER BY
 				<text><![CDATA[Destinatario Merce]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="277" y="28" width="181" height="10"/>
+				<reportElement x="320" y="41" width="129" height="10">
+					<printWhenExpression><![CDATA[$F{fiscaldoc_header_partner_indfat_id}.compareTo($F{fiscaldoc_header_partner_indcons_id})]]></printWhenExpression>
+				</reportElement>
 				<textElement>
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{res_partner_address_street2}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{res_partner_address_a_city}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="278" y="39" width="44" height="10">
-					<printWhenExpression><![CDATA[$F{res_partner_address_street2}>"0"]]></printWhenExpression>
+				<reportElement x="280" y="41" width="37" height="10">
+					<printWhenExpression><![CDATA[$F{fiscaldoc_header_partner_indfat_id}.compareTo($F{fiscaldoc_header_partner_indcons_id})]]></printWhenExpression>
 				</reportElement>
 				<textElement>
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{res_partner_address_zip}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{res_partner_address_a_zip}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="280" y="31" width="208" height="10">
+					<printWhenExpression><![CDATA[$F{fiscaldoc_header_partner_indfat_id}.compareTo($F{fiscaldoc_header_partner_indcons_id})]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{res_partner_address_a_street}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="324" y="39" width="129" height="10">
-					<printWhenExpression><![CDATA[$F{res_partner_address_street2}>"0"]]></printWhenExpression>
+				<reportElement x="278" y="21" width="252" height="10">
+					<printWhenExpression><![CDATA[$F{fiscaldoc_header_partner_indfat_id}.compareTo($F{fiscaldoc_header_partner_indcons_id})]]></printWhenExpression>
 				</reportElement>
 				<textElement>
-					<font size="8"/>
+					<font size="8" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{res_partner_address_city}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{res_partner_name}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>
@@ -400,32 +413,25 @@ ORDER BY
 				<reportElement x="2" y="62" width="546" height="15" backcolor="#B7B7B7"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="315" y="66" width="55" height="8"/>
+				<reportElement x="480" y="66" width="55" height="8"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="6" isBold="true" isItalic="true"/>
 				</textElement>
 				<text><![CDATA[Quantità]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="285" y="66" width="24" height="8"/>
+				<reportElement x="449" y="66" width="24" height="8"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="6" isBold="true" isItalic="true"/>
 				</textElement>
 				<text><![CDATA[UM]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="58" y="66" width="218" height="8"/>
+				<reportElement x="86" y="66" width="192" height="8"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="6" isBold="true" isItalic="true"/>
 				</textElement>
 				<text><![CDATA[Articolo]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="509" y="66" width="34" height="8"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font size="6" isBold="true" isItalic="true"/>
-				</textElement>
-				<text><![CDATA[Cod. IVA]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="5" y="66" width="47" height="8"/>
@@ -534,97 +540,46 @@ ORDER BY
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{sale_shop_name}]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement x="370" y="66" width="55" height="8"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="6" isBold="true" isItalic="true"/>
-				</textElement>
-				<text><![CDATA[Prezzo Unitario	]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="431" y="66" width="27" height="8"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="6" isBold="true" isItalic="true"/>
-				</textElement>
-				<text><![CDATA[Sconto]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="459" y="66" width="50" height="8"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="6" isBold="true" isItalic="true"/>
-				</textElement>
-				<text><![CDATA[Importo Rigo]]></text>
-			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="10" splitType="Stretch">
 			<frame>
 				<reportElement style="Righe" mode="Opaque" x="5" y="0" width="547" height="10"/>
-				<textField isBlankWhenNull="true">
-					<reportElement x="509" y="0" width="34" height="10">
-						<printWhenExpression><![CDATA[$P{prezzi}.equals( 1 )]]></printWhenExpression>
-					</reportElement>
-					<textElement>
-						<font size="8"/>
-					</textElement>
-					<textFieldExpression class="java.lang.String"><![CDATA[$F{account_tax_description}]]></textFieldExpression>
-				</textField>
 				<textField>
-					<reportElement x="280" y="0" width="24" height="10"/>
+					<reportElement x="443" y="0" width="24" height="10"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="8"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[$F{product_uom_name}]]></textFieldExpression>
 				</textField>
-				<textField isBlankWhenNull="true">
-					<reportElement x="431" y="0" width="27" height="10">
-						<printWhenExpression><![CDATA[$P{sconto}.equals( 1 )]]></printWhenExpression>
-					</reportElement>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8"/>
-					</textElement>
-					<textFieldExpression class="java.lang.String"><![CDATA[$F{fiscaldoc_righe_sconti_riga}]]></textFieldExpression>
-				</textField>
-				<textField pattern="¤ #,##0.00">
-					<reportElement x="459" y="0" width="50" height="10">
-						<printWhenExpression><![CDATA[$P{prezzi}.equals( 1 )]]></printWhenExpression>
-					</reportElement>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font size="8"/>
-					</textElement>
-					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{fiscaldoc_righe_totale_riga}]]></textFieldExpression>
-				</textField>
 				<textField isStretchWithOverflow="true">
-					<reportElement x="55" y="0" width="220" height="10"/>
+					<reportElement x="0" y="0" width="428" height="10"/>
 					<textElement>
 						<font size="8"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[$F{fiscaldoc_righe_descrizione_riga}]]></textFieldExpression>
 				</textField>
 			</frame>
-			<textField pattern="¤ #,##0.00">
-				<reportElement x="370" y="0" width="50" height="10">
-					<printWhenExpression><![CDATA[$P{prezzi}.equals( 1 )]]></printWhenExpression>
-				</reportElement>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{fiscaldoc_righe_product_prezzo_unitario}]]></textFieldExpression>
-			</textField>
 			<textField>
-				<reportElement x="315" y="0" width="55" height="10"/>
+				<reportElement x="480" y="0" width="55" height="10"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{fiscaldoc_righe_product_uom_qty}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="7" y="0" width="47" height="10"/>
+		</band>
+		<band height="10">
+			<printWhenExpression><![CDATA[$F{product_template_description_sale}]]></printWhenExpression>
+			<frame>
+				<reportElement style="Righe" mode="Opaque" x="5" y="0" width="547" height="10"/>
+			</frame>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="10" y="0" width="423" height="10"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{product_product_default_code}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{product_template_description_sale}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

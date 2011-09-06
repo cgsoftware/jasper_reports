@@ -37,11 +37,18 @@ import tempfile
 import codecs
 import sql_db
 import netsvc
+import release
 
 from JasperReports import *
 
+# Determines the port where the JasperServer process should listen with its XML-RPC server for incomming calls
 tools.config['jasperport'] = tools.config.get('jasperport', 8090)
-tools.config['jasperpid'] = tools.config.get('jasperpid', False)
+
+# Determines the file name where the process ID of the JasperServer process should be stored
+tools.config['jasperpid'] = tools.config.get('jasperpid', 'openerp-jasper.pid')
+
+# Determines if temporary files will be removed
+tools.config['jasperunlink'] = tools.config.get('jasperunlink', True)
 
 class Report:
 	def __init__(self, name, cr, uid, ids, data, context):
@@ -59,6 +66,10 @@ class Report:
 		self.outputFormat = 'pdf'
 
 	def execute(self):
+		"""
+		If self.context contains "return_pages = True" it will return the number of pages
+		of the generated report.
+		"""
 		logger = netsvc.Logger()
 
 		# * Get report path *
@@ -94,10 +105,8 @@ class Report:
 		# If the language used is xpath create the xmlFile in dataFile.
 		if self.report.language() == 'xpath':
 			if self.data.get('data_source','model') == 'records':
-				#generator = XmlRecordDataGenerator()
-				generator = CsvRecordDataGenerator()
+				generator = CsvRecordDataGenerator(self.report, self.data['records'] )
 			else:
-				#generator = XmlBrowseDataGenerator( self.report, self.model, self.pool, self.cr, self.uid, self.ids, self.context )
 				generator = CsvBrowseDataGenerator( self.report, self.model, self.pool, self.cr, self.uid, self.ids, self.context )
 			generator.generate( dataFile )
 			self.temporaryFiles += generator.temporaryFiles
@@ -123,12 +132,17 @@ class Report:
 				})
 				self.temporaryFiles.append( subreportDataFile )
 
-				generator = CsvBrowseDataGenerator( subreport, self.model, self.pool, self.cr, self.uid, self.ids, self.context )
+				if subreport.isHeader():
+					generator = CsvBrowseDataGenerator( subreport, 'res.users', self.pool, self.cr, self.uid, [self.uid], self.context )
+				elif self.data.get('data_source','model') == 'records':
+					generator = CsvRecordDataGenerator( subreport, self.data['records'] )
+				else:
+					generator = CsvBrowseDataGenerator( subreport, self.model, self.pool, self.cr, self.uid, self.ids, self.context )
 				generator.generate( subreportDataFile )
-
+				
 
 		# Call the external java application that will generate the PDF file in outputFile
-		self.executeReport( dataFile, outputFile, subreportDataFiles )
+		pages = self.executeReport( dataFile, outputFile, subreportDataFiles )
 		elapsed = (time.time() - start) / 60
 		logger.notifyChannel("jasper_reports", netsvc.LOG_INFO, "ELAPSED: '%f'" % elapsed )
 
@@ -140,14 +154,19 @@ class Report:
 			f.close()
 
 		# Remove all temporary files created during the report
-		for file in self.temporaryFiles:
-			try:
-				os.unlink( file )
-			except os.error, e:
-				logger = netsvc.Logger()
-				logger.notifyChannel("jasper_reports", netsvc.LOG_WARNING, "Could not remove file '%s'." % file )
+		if tools.config['jasperunlink']:
+			for file in self.temporaryFiles:
+				try:
+					os.unlink( file )
+				except os.error, e:
+					logger = netsvc.Logger()
+					logger.notifyChannel("jasper_reports", netsvc.LOG_WARNING, "Could not remove file '%s'." % file )
 		self.temporaryFiles = []
-		return ( data, self.outputFormat )
+
+		if self.context.get('return_pages'):
+			return ( data, self.outputFormat, pages )
+		else:
+			return ( data, self.outputFormat )
 
 	def path(self):
 		return os.path.abspath(os.path.dirname(__file__))
@@ -176,6 +195,7 @@ class Report:
 		return tools.config['db_password'] or ''
 
 	def executeReport(self, dataFile, outputFile, subreportDataFiles):
+		
 		locale = self.context.get('lang', 'en_US')
 		
 		connectionParameters = {
@@ -193,16 +213,16 @@ class Report:
 			'IDS': self.ids,
 		}
 		if 'form' in self.data:
-		  #import pdb;pdb.set_trace()
+		  #
 		  if 'parameters' in self.data['form']:
 			parameters.update( self.data['form']['parameters'] )
 		  else:
 		      if 'parameters' in self.data:
 			parameters.update( self.data['parameters'] )
-			
+
 		server = JasperServer( int( tools.config['jasperport'] ) )
 		server.setPidFile( tools.config['jasperpid'] )
-		server.execute( connectionParameters, self.reportPath, outputFile, parameters )
+		return server.execute( connectionParameters, self.reportPath, outputFile, parameters )
 
 
 class report_jasper(report.interface.report_int):
@@ -211,9 +231,12 @@ class report_jasper(report.interface.report_int):
 		# exists to avoid report_int's assert. We want to keep the 
 		# automatic registration at login, but at the same time we 
 		# need modules to be able to use a parser for certain reports.
-		if name in netsvc.Service._services:
-			del netsvc.Service._services[name]
-
+		if release.major_version == '5.0':
+			if name in netsvc.SERVICES:
+				del netsvc.SERVICES[name]
+		else:
+			if name in netsvc.Service._services:
+				del netsvc.Service._services[name]
 		super(report_jasper, self).__init__(name)
 		self.model = model
 		self.parser = parser
@@ -235,23 +258,62 @@ class report_jasper(report.interface.report_int):
 		#return ( r.execute(), 'pdf' )
 		return r.execute()
 
-def register_jasper_report(report_name, model_name):
-	name = 'report.%s' % report_name
-	if name in netsvc.Service._services:
-		return
-	report_jasper( name, model_name )
 
-class ir_actions_report_xml(osv.osv):
-	_inherit = 'ir.actions.report.xml'
 
-	def register_all(self, cr):
+if release.major_version == '5.0':
+	# Version 5.0 specific code
+
+	# Ugly hack to avoid developers the need to register reports
+	import pooler
+	import report
+
+	def register_jasper_report(name, model):
+		name = 'report.%s' % name
+		# Register only if it didn't exist another "jasper_report" with the same name
+		# given that developers might prefer/need to register the reports themselves.
+		# For example, if they need their own parser.
+		if netsvc.service_exist( name ):
+			if isinstance( netsvc.SERVICES[name], report_jasper ):
+				return
+			del netsvc.SERVICES[name]
+		report_jasper( name, model )
+
+
+	# This hack allows automatic registration of jrxml files without 
+	# the need for developers to register them programatically.
+
+	old_register_all = report.interface.register_all
+	def new_register_all(db):
+		value = old_register_all(db)
+
+		cr = db.cursor()
 		# Originally we had auto=true in the SQL filter but we will register all reports.
 		cr.execute("SELECT * FROM ir_act_report_xml WHERE report_rml ilike '%.jrxml' ORDER BY id")
 		records = cr.dictfetchall()
+		cr.close()
 		for record in records:
-			register_jasper_report(record['report_name'], record['model'])
-		return super(ir_actions_report_xml, self).register_all(cr)
+			register_jasper_report( record['report_name'], record['model'] )
+		return value
 
-ir_actions_report_xml()
+	report.interface.register_all = new_register_all
+else:
+	# Version 6.0 and later
 
+	def register_jasper_report(report_name, model_name):
+		name = 'report.%s' % report_name
+		report_jasper( name, model_name )
 
+	class ir_actions_report_xml(osv.osv):
+		_inherit = 'ir.actions.report.xml'
+
+		def register_all(self, cr):
+			# Originally we had auto=true in the SQL filter but we will register all reports.
+			cr.execute("SELECT * FROM ir_act_report_xml WHERE report_rml ilike '%.jrxml' ORDER BY id")
+			records = cr.dictfetchall()
+			for record in records:
+				register_jasper_report(record['report_name'], record['model'])
+			return super(ir_actions_report_xml, self).register_all(cr)
+
+	ir_actions_report_xml()
+
+# vim:noexpandtab:smartindent:tabstop=8:softtabstop=8:shiftwidth=8:

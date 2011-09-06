@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+      <report id="report_registri_iva" model="account_temp_regiva" name="RegistroIVA" string="Registri IVA" rml="ContabilitaItaliana/report/RegistroIVA"/>
+  
+    </data>
+</openerp>
